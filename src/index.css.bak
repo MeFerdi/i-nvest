@@ -1,0 +1,153 @@
+@import '@solana/wallet-adapter-react-ui/styles.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0a0b0f;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(124, 92, 252, 0.18), transparent 60%),
+    radial-gradient(900px 500px at 90% 0%, rgba(59, 130, 246, 0.14), transparent 60%),
+    #0a0b0f;
+}
+
+.glass-surface {
+  background: linear-gradient(180deg, rgba(17, 19, 24, 0.88), rgba(17, 19, 24, 0.72));
+  border: 1px solid #1e2130;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02) inset, 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+.hero-kpi {
+  border: 1px solid #24283b;
+  background: linear-gradient(180deg, rgba(17, 19, 24, 0.95), rgba(14, 16, 22, 0.95));
+}
+
+.partner-badge img {
+  filter: saturate(1.05);
+  opacity: 0.95;
+}
+
+.stack-logo-chip {
+  height: 42px;
+  border: 1px solid #24283b;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 248, 252, 0.96));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 6px 10px;
+}
+
+.stack-logo-image {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.stack-logo-label {
+  color: #111318;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.signal-card-enter {
+  animation: signalEnter 400ms ease-out;
+}
+
+.signal-example-icon {
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+
+.logo-bright {
+  filter: brightness(1.2);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@keyframes signalEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Wallet adapter overrides */
+.wallet-adapter-button {
+  background: #10b981 !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  height: 42px !important;
+  padding: 0 20px !important;
+  transition: background 0.2s !important;
+}
+.wallet-adapter-button:hover {
+  background: #34d399 !important;
+}
+.wallet-adapter-modal-wrapper {
+  background: #111318 !important;
+  border: 1px solid #1e2130 !important;
+  border-radius: 16px !important;
+}
+.wallet-adapter-modal-title {
+  color: #e2e8f0 !important;
+}
+.wallet-adapter-modal-list li {
+  background: #1e2130 !important;
+  border-radius: 10px !important;
+  margin-bottom: 6px !important;
+}
+.wallet-adapter-dropdown {
+  z-index: 50;
+}
+.wallet-adapter-modal-wrapper {
+  z-index: 50;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #111318;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e2130;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2d3148;
+}
+
+/* Pulse dot */
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.pulse-dot {
+  animation: pulseDot 1.5s ease-in-out infinite;
+}

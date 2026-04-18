@@ -1,0 +1,263 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import '@solana/wallet-adapter-react-ui/styles.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --font-sans: 'DM Sans';
+  --font-mono: 'JetBrains Mono';
+
+  --brand-bg: 245 248 254;
+  --brand-surface: 255 255 255;
+  --brand-panel: 233 238 249;
+  --brand-border: 211 221 240;
+  --brand-accent: 53 94 204;
+  --brand-accent-hover: 44 80 183;
+  --brand-green: 15 141 102;
+  --brand-red: 204 59 59;
+  --brand-yellow: 180 124 25;
+  --brand-blue: 14 116 185;
+  --brand-text: 20 32 51;
+  --brand-muted: 91 104 128;
+  --brand-subtle: 238 243 251;
+  --brand-inverse: 248 251 255;
+
+  --surface-glass: rgb(255 255 255 / 0.94);
+  --surface-panel: rgb(255 255 255 / 0.96);
+  --surface-kpi: rgb(255 255 255 / 0.98);
+  --surface-chip: rgb(255 255 255 / 0.96);
+  --shadow-soft: 0 24px 80px rgba(17, 24, 39, 0.08);
+  --shadow-card: 0 18px 45px rgba(53, 94, 204, 0.08);
+}
+
+.dark {
+  color-scheme: dark;
+  --brand-bg: 10 14 26;
+  --brand-surface: 18 24 42;
+  --brand-panel: 24 32 55;
+  --brand-border: 36 48 74;
+  --brand-accent: 120 166 255;
+  --brand-accent-hover: 147 184 255;
+  --brand-green: 61 201 151;
+  --brand-red: 255 110 110;
+  --brand-yellow: 242 193 94;
+  --brand-blue: 84 192 255;
+  --brand-text: 241 244 250;
+  --brand-muted: 158 176 208;
+  --brand-subtle: 20 27 46;
+  --brand-inverse: 8 16 29;
+
+  --surface-glass: rgb(18 24 42 / 0.94);
+  --surface-panel: rgb(20 27 46 / 0.96);
+  --surface-kpi: rgb(24 32 55 / 0.96);
+  --surface-chip: rgb(255 255 255 / 0.96);
+  --shadow-soft: 0 28px 90px rgba(2, 6, 23, 0.42);
+  --shadow-card: 0 18px 42px rgba(2, 6, 23, 0.28);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: rgb(var(--brand-bg));
+  color: rgb(var(--brand-text));
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.glass-surface {
+  background: var(--surface-glass);
+  border: 1px solid rgb(var(--brand-border));
+  box-shadow: var(--shadow-soft);
+}
+
+.hero-kpi {
+  background: var(--surface-kpi);
+  border: 1px solid rgb(var(--brand-border));
+  box-shadow: var(--shadow-card);
+}
+
+.partner-badge img {
+  filter: saturate(1.06);
+  opacity: 0.96;
+}
+
+.stack-logo-chip {
+  min-height: 46px;
+  border: 1px solid rgb(var(--brand-border));
+  background: var(--surface-chip);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+}
+
+.stack-logo-image {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.stack-logo-label {
+  color: rgb(15 23 42);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.signal-card-enter {
+  animation: signalEnter 320ms ease-out;
+}
+
+.signal-example-icon {
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+
+.logo-bright {
+  filter: brightness(1.08);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.wallet-adapter-button,
+.wallet-adapter-button-trigger {
+  min-height: 42px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgb(var(--brand-border)) !important;
+  background: rgb(var(--brand-accent)) !important;
+  color: rgb(var(--brand-inverse)) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  padding: 0 18px !important;
+  box-shadow: 0 16px 32px rgba(53, 94, 204, 0.22) !important;
+  transition:
+    background-color 150ms ease,
+    transform 100ms ease,
+    box-shadow 150ms ease !important;
+}
+
+.wallet-adapter-button:hover,
+.wallet-adapter-button-trigger:hover {
+  background: rgb(var(--brand-accent-hover)) !important;
+  box-shadow: 0 18px 36px rgba(53, 94, 204, 0.28) !important;
+}
+
+.wallet-adapter-button:active,
+.wallet-adapter-button-trigger:active {
+  transform: translateY(1px);
+}
+
+.wallet-adapter-button:focus-visible,
+.wallet-adapter-button-trigger:focus-visible {
+  outline: none !important;
+  box-shadow:
+    0 0 0 3px rgba(var(--brand-bg), 1),
+    0 0 0 5px rgba(var(--brand-accent), 0.38) !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  background: var(--surface-panel) !important;
+  border: 1px solid rgb(var(--brand-border)) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--shadow-soft) !important;
+  color: rgb(var(--brand-text)) !important;
+}
+
+.wallet-adapter-modal-title {
+  color: rgb(var(--brand-text)) !important;
+}
+
+.wallet-adapter-modal-list li {
+  background: rgb(var(--brand-subtle)) !important;
+  border: 1px solid rgb(var(--brand-border)) !important;
+  border-radius: 14px !important;
+  margin-bottom: 8px !important;
+}
+
+.wallet-adapter-dropdown,
+.wallet-adapter-modal-wrapper {
+  z-index: 50;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--brand-bg));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--brand-border));
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--brand-muted));
+}
+
+@keyframes signalEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+.pulse-dot {
+  animation: pulseDot 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
