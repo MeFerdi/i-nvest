@@ -90,7 +90,7 @@
               var errorText = msgEl ? msgEl.textContent : 'Vite build error';
               var fileText = fileEl ? fileEl.textContent : '';
               // Parse file:line:col from file text
-              var locMatch = fileText.match(/([^:]+):(d+):(d+)/);
+              var locMatch = fileText.match(/([^:]+):(\d+):(\d+)/);
               sendError(
                 errorText.substring(0, 500),
                 locMatch ? locMatch[1] : undefined,
