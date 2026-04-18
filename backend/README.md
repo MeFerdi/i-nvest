@@ -42,6 +42,6 @@ The frontend currently polls wallet state and computes signals client-side. That
 
 ## Run locally
 
-1. Copy `.env.example` to `.env`
+1. Create a `.env` file in `backend/` if your local setup requires environment variables
 2. Install dependencies in `backend/`
 3. Run `npm run dev`
