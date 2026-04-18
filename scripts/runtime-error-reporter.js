@@ -138,7 +138,7 @@
         var fileEl = shadow.querySelector('.file') || shadow.querySelector('.file-link');
         var errorText = msgEl ? msgEl.textContent : 'Vite build error';
         var fileText = fileEl ? fileEl.textContent : '';
-        var locMatch = fileText.match(/([^:]+):(d+):(d+)/);
+        var locMatch = fileText.match(/([^:]+):(\d+):(\d+)/);
         sendError(
           errorText.substring(0, 500),
           locMatch ? locMatch[1] : undefined,

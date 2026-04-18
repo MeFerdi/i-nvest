@@ -4,12 +4,46 @@ import { ConnectionProvider, WalletProvider, useWallet } from '@solana/wallet-ad
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { SolflareWalletAdapter } from '@solana/wallet-adapter-solflare';
 import { QUICKNODE_WS, SOLANA_RPC_PROXY } from './config.js';
-import Dashboard from './components/Dashboard.jsx';
-import WalletConnect from './components/WalletConnect.jsx';
-import PrivacyPage from './pages/PrivacyPage.jsx';
-import TermsPage from './pages/TermsPage.jsx';
-import DisclosuresPage from './pages/DisclosuresPage.jsx';
 
+function Dashboard() {
+  return (
+    <main>
+      <h1>Dashboard</h1>
+    </main>
+  );
+}
+
+function WalletConnect() {
+  return (
+    <main>
+      <h1>Connect Wallet</h1>
+    </main>
+  );
+}
+
+function PrivacyPage() {
+  return (
+    <main>
+      <h1>Privacy Policy</h1>
+    </main>
+  );
+}
+
+function TermsPage() {
+  return (
+    <main>
+      <h1>Terms of Service</h1>
+    </main>
+  );
+}
+
+function DisclosuresPage() {
+  return (
+    <main>
+      <h1>Disclosures</h1>
+    </main>
+  );
+}
 const endpoint = SOLANA_RPC_PROXY;
 const connectionConfig = {
   commitment: 'confirmed',
