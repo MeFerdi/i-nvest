@@ -4,6 +4,17 @@
   if (window.__viteErrorMonitorInstalled) return;
   window.__viteErrorMonitorInstalled = true;
 
+  // Only enable cross-origin messaging in development
+  var isDevelopment = /localhost|127\.0\.0\.1/.test(window.location.host);
+  var ALLOWED_PARENT_ORIGINS = isDevelopment ? [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://localhost:8080',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:3000',
+    window.location.origin
+  ] : [];
+
   // Namespace localStorage per preview project
   // All previews share the same origin — without namespacing, stale data from
   // one project (e.g. reddit_posts with 'timestamp') crashes another (expecting 'createdAt')
@@ -37,11 +48,16 @@
         errorMsg.includes('504') ||
         errorMsg.includes('Failed to fetch dynamically imported module')) {
       try {
-        window.parent.postMessage({
-          type: 'vite-cache-error',
-          error: errorMsg,
-          timestamp: Date.now()
-        }, '*');
+        if (ALLOWED_PARENT_ORIGINS.length > 0 && window.parent !== window) {
+          try {
+            var parentOrigin = new URL(document.referrer || '').origin;
+            if (ALLOWED_PARENT_ORIGINS.includes(parentOrigin)) {
+              window.parent.postMessage({ type: 'vite-cache-error', error: errorMsg, timestamp: Date.now() }, parentOrigin);
+            }
+          } catch (e2) {
+            // Referrer not available or invalid; don't send
+          }
+        }
       } catch (e) {}
     }
   };
@@ -52,11 +68,16 @@
       const url = event.target.src || event.target.href;
       if (url && url.includes('node_modules/.vite/deps')) {
         try {
-          window.parent.postMessage({
-            type: 'vite-cache-error',
-            error: 'Failed to load Vite optimized dependency: ' + url,
-            timestamp: Date.now()
-          }, '*');
+          if (ALLOWED_PARENT_ORIGINS.length > 0 && window.parent !== window) {
+            try {
+              var parentOrigin = new URL(document.referrer || '').origin;
+              if (ALLOWED_PARENT_ORIGINS.includes(parentOrigin)) {
+                window.parent.postMessage({ type: 'vite-cache-error', error: 'Failed to load Vite optimized dependency: ' + url, timestamp: Date.now() }, parentOrigin);
+              }
+            } catch (e2) {
+              // Referrer not available or invalid; don't send
+            }
+          }
         } catch (e) {}
       }
     }
