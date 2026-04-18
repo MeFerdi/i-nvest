@@ -4,6 +4,17 @@
   if (window.__runtimeErrorReporterInstalled) return;
   window.__runtimeErrorReporterInstalled = true;
 
+  // Only enable cross-origin messaging in development
+  var isDevelopment = /localhost|127\.0\.0\.1/.test(window.location.host);
+  var ALLOWED_PARENT_ORIGINS = isDevelopment ? [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://localhost:8080',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:3000',
+    window.location.origin
+  ] : [];
+
   var reported = {};
   var COOLDOWN_MS = 3000;
 
@@ -19,15 +30,24 @@
     if (file && file.includes('/scripts/')) return;
 
     try {
-      window.parent.postMessage({
-        type: 'RUNTIME_ERROR',
-        message: String(msg || 'Unknown error'),
-        file: file || undefined,
-        line: line || undefined,
-        column: col || undefined,
-        stack: stack ? String(stack).substring(0, 2000) : undefined,
-        timestamp: now
-      }, '*');
+      if (ALLOWED_PARENT_ORIGINS.length > 0 && window.parent !== window) {
+        try {
+          var parentOrigin = new URL(document.referrer || '').origin;
+          if (ALLOWED_PARENT_ORIGINS.includes(parentOrigin)) {
+            window.parent.postMessage({
+              type: 'RUNTIME_ERROR',
+              message: String(msg || 'Unknown error'),
+              file: file || undefined,
+              line: line || undefined,
+              column: col || undefined,
+              stack: stack ? String(stack).substring(0, 2000) : undefined,
+              timestamp: now
+            }, parentOrigin);
+          }
+        } catch (e2) {
+          // Referrer not available or invalid; don't send
+        }
+      }
     } catch (e) {}
   }
 
@@ -78,29 +98,30 @@
   var buildErrorObserver = new MutationObserver(function(mutations) {
     for (var i = 0; i < mutations.length; i++) {
       for (var j = 0; j < mutations[i].addedNodes.length; j++) {
-        var node = mutations[i].addedNodes[j];
-        if (node.tagName && node.tagName.toLowerCase() === 'vite-error-overlay') {
-          // Extract error text from the overlay's shadow DOM
-          setTimeout(function() {
-            try {
-              var shadow = node.shadowRoot;
-              if (!shadow) return;
-              var msgEl = shadow.querySelector('.message-body') || shadow.querySelector('.message') || shadow.querySelector('pre');
-              var fileEl = shadow.querySelector('.file') || shadow.querySelector('.file-link');
-              var errorText = msgEl ? msgEl.textContent : 'Vite build error';
-              var fileText = fileEl ? fileEl.textContent : '';
-              // Parse file:line:col from file text
-              var locMatch = fileText.match(/([^:]+):(d+):(d+)/);
-              sendError(
-                errorText.substring(0, 500),
-                locMatch ? locMatch[1] : undefined,
-                locMatch ? parseInt(locMatch[2]) : undefined,
-                locMatch ? parseInt(locMatch[3]) : undefined,
-                undefined
-              );
-            } catch (e) {}
-          }, 100);
-        }
+        (function(node) {
+          if (node.tagName && node.tagName.toLowerCase() === 'vite-error-overlay') {
+            // Extract error text from the overlay's shadow DOM
+            setTimeout(function() {
+              try {
+                var shadow = node.shadowRoot;
+                if (!shadow) return;
+                var msgEl = shadow.querySelector('.message-body') || shadow.querySelector('.message') || shadow.querySelector('pre');
+                var fileEl = shadow.querySelector('.file') || shadow.querySelector('.file-link');
+                var errorText = msgEl ? msgEl.textContent : 'Vite build error';
+                var fileText = fileEl ? fileEl.textContent : '';
+                // Parse file:line:col from file text
+                var locMatch = fileText.match(/([^:]+):(d+):(d+)/);
+                sendError(
+                  errorText.substring(0, 500),
+                  locMatch ? locMatch[1] : undefined,
+                  locMatch ? parseInt(locMatch[2]) : undefined,
+                  locMatch ? parseInt(locMatch[3]) : undefined,
+                  undefined
+                );
+              } catch (e) {}
+            }, 100);
+          }
+        })(mutations[i].addedNodes[j]);
       }
     }
   });
