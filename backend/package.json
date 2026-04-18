@@ -1,0 +1,17 @@
+{
+  "name": "wesignl-backend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "check": "node --check src/server.js && node --check src/app.js && node --check src/config/env.js && node --check src/routes/index.js && node --check src/routes/health.js && node --check src/routes/auth.js && node --check src/routes/wallets.js && node --check src/routes/signals.js && node --check src/routes/executions.js"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.0",
+    "dotenv": "^16.4.5",
+    "fastify": "^5.0.0",
+    "zod": "^3.23.8"
+  }
+}
