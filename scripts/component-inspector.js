@@ -3,6 +3,17 @@
 (function() {
   'use strict';
 
+  // Only enable cross-origin messaging in development
+  var isDevelopment = /localhost|127\.0\.0\.1/.test(window.location.host);
+  var ALLOWED_PARENT_ORIGINS = isDevelopment ? [
+    window.location.origin,
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://localhost:8080',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:3000'
+  ] : [];
+
   let isEnabled = false;
   let currentHighlight = null;
   let originalCursor = '';
@@ -30,8 +41,17 @@
     document.body.appendChild(overlay);
     setupEventListeners();
 
-    // Request current inspector state from parent (handles HMR re-init)
-    window.parent.postMessage({ type: 'INSPECTOR_REQUEST_STATE' }, '*');
+    // Request current inspector state from parent (only in development)
+    if (ALLOWED_PARENT_ORIGINS.length > 0 && window.parent !== window) {
+      try {
+        var parentOrigin = new URL(document.referrer || '').origin;
+        if (ALLOWED_PARENT_ORIGINS.includes(parentOrigin)) {
+          window.parent.postMessage({ type: 'INSPECTOR_REQUEST_STATE' }, parentOrigin);
+        }
+      } catch (e) {
+        // Referrer not available or invalid; don't send
+      }
+    }
   }
 
   function setupEventListeners() {
@@ -184,10 +204,20 @@
     overlay.style.background = 'rgba(13, 0, 255, 0.2)';
     overlay.style.borderWidth = '3px';
 
-    window.parent.postMessage({
-      type: 'INSPECTOR_ELEMENT_SELECTED',
-      element: elementInfo,
-    }, '*');
+    // Send element selection to parent only if it's a trusted origin (development only)
+    if (ALLOWED_PARENT_ORIGINS.length > 0 && window.parent !== window) {
+      try {
+        var parentOrigin = new URL(document.referrer || '').origin;
+        if (ALLOWED_PARENT_ORIGINS.includes(parentOrigin)) {
+          window.parent.postMessage({
+            type: 'INSPECTOR_ELEMENT_SELECTED',
+            element: elementInfo,
+          }, parentOrigin);
+        }
+      } catch (e) {
+        // Referrer not available or invalid; don't send
+      }
+    }
   }
 
   function getRelevantAttributes(element) {
