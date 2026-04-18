@@ -9,7 +9,11 @@ try {
     host: env.HOST
   });
 
-  app.log.info(`WeSignl backend listening on http://${env.HOST}:${env.PORT}`);
+  const bindUrl = `http://${env.HOST}:${env.PORT}`;
+  const localHost = env.HOST === '0.0.0.0' ? 'localhost' : env.HOST;
+  const localUrl = `http://${localHost}:${env.PORT}`;
+
+  app.log.info(`WeSignl backend listening on ${bindUrl} (open ${localUrl} locally)`);
 } catch (error) {
   app.log.error(error);
   process.exit(1);
