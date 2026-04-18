@@ -41,6 +41,9 @@
   }
 
   function handleMessage(event) {
+    if (!event.data || typeof event.data !== 'object') {
+      return;
+    }
     const { type, enabled } = event.data;
 
     if (type === 'INSPECTOR_TOGGLE') {
